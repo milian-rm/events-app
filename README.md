@@ -33,9 +33,9 @@ PORT=3002
 URI_MONGODB=mongodb://localhost:27017/events-app
 EVENTS_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
 
-JWT_SECRET=clave-secreta-compartida-con-auth
-JWT_ISSUER=auth-service
-JWT_AUDIENCE=events-service
+JWT_SECRET=55dtnITgUBY2ocnp8myCLtbJRdNWkCfdvhkcIS3OMpJScZkDwZFvB0yxRqZjoMpf7QbUqXO94cCrpNxUvIeWeg==!
+JWT_ISSUER=AdminEventsAuth
+JWT_AUDIENCE=AdminEventsAuth
 
 INTERNAL_SERVICE_TOKEN=un-token-compartido-largo-y-random
 ```
@@ -71,6 +71,22 @@ Todos los endpoints de eventos requieren autenticación, mediante uno de estos d
 
 El endpoint `GET /events/:id/capacity` acepta ambos métodos indistintamente (JWT de usuario o token interno), ya que tanto el Frontend como el Servicio B necesitan consultarlo.
 
+## Cambios de autenticacion JWT
+
+### Servicio A
+
+- La validacion JWT usa los mismos valores que emite `AuthService`: `SecretKey`, `Issuer` y `Audience`.
+- Se acepta el token desde `Authorization: Bearer <token>` o desde `x-token`.
+- Se conserva el soporte de `x-internal-token` para comunicacion interna desde Servicio B.
+- `ServicioA/.env.example` fue alineado con `AuthService/src/AuthService.Api/appsettings.json`.
+
+### Servicio B
+
+- Las rutas de inscripciones y relaciones usuario-inscripcion quedan protegidas con JWT.
+- El middleware valida firma, expiracion, `issuer` y `audience`.
+- Se acepta el token desde `Authorization: Bearer <token>` o desde `x-token`.
+- `ServicioB/.env.example` fue alineado con los valores JWT de AuthService.
+
 ## Endpoints
 
 | Método | Ruta | Descripción | Auth |
@@ -81,6 +97,11 @@ El endpoint `GET /events/:id/capacity` acepta ambos métodos indistintamente (JW
 | POST | `/eventsService/v1/events` | Crea un evento | JWT |
 | PUT | `/eventsService/v1/events/:id` | Edita un evento | JWT |
 | DELETE | `/eventsService/v1/events/:id` | Elimina un evento (soft delete) | JWT |
+| GET | `/eventsService/v1/users` | Lista encargados activos | JWT |
+| GET | `/eventsService/v1/users/:id` | Obtiene un encargado por ID | JWT |
+| POST | `/eventsService/v1/users` | Crea un encargado de eventos | JWT |
+| PUT | `/eventsService/v1/users/:id` | Edita un encargado | JWT |
+| DELETE | `/eventsService/v1/users/:id` | Elimina un encargado (soft delete) | JWT |
 
 ### Modelo de Evento
 
@@ -90,7 +111,20 @@ El endpoint `GET /events/:id/capacity` acepta ambos métodos indistintamente (JW
   "date": "fecha ISO8601 (requerido)",
   "location": "string (requerido)",
   "capacity": "number entero > 0 (requerido)",
+  "managerId": "ObjectId del encargado (requerido)",
   "description": "string (opcional, máx. 500 caracteres)"
+}
+```
+
+### Modelo de Encargado
+
+```json
+{
+  "fullName": "string (requerido, 2-100 caracteres)",
+  "email": "string email (requerido, unico activo)",
+  "phone": "string opcional",
+  "documentId": "string opcional",
+  "role": "manager"
 }
 ```
 
@@ -99,3 +133,4 @@ El endpoint `GET /events/:id/capacity` acepta ambos métodos indistintamente (JW
 - La eliminación es lógica (soft delete): el documento no se borra de MongoDB, se marca `isActive: false` y deja de aparecer en listados y consultas.
 - El Servicio B consume `GET /events/:id` y `GET /events/:id/capacity` mediante `x-internal-token` para obtener la capacidad de cada evento y calcular disponibilidad de cupos.
 - Este servicio **no administra datos de personas ni asistentes** (nombre, correo, inscripciones). Esa información y su lógica correspondiente viven en el Servicio B, que las referencia por `eventId` contra los datos expuestos aquí.
+- Los encargados pertenecen a Servicio A. Servicio B consulta la coleccion `users` solo para impedir duplicidad: un encargado activo no puede registrarse como asistente ni enlazarse a una inscripcion.

@@ -6,7 +6,7 @@ const corsOptions = {
     //Especifica los metodos HTTP permitidos
     methods: "GET,POST,PUT,DELETE",
     //Especifica los encabezados permitidos
-    allowedHeaders: "Content-Type,Authorization",
+    allowedHeaders: "Content-Type,Authorization,x-token",
 };
 //Exporta la configuracion de CORS para ser utilizada en otros archivos
 export {corsOptions};

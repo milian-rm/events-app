@@ -17,6 +17,9 @@ export const validateCreateEvent = [
   body('capacity')
     .notEmpty().withMessage('La capacidad es requerida')
     .isInt({ min: 1 }).withMessage('La capacidad debe ser un entero mayor a 0'),
+  body('managerId')
+    .notEmpty().withMessage('El encargado del evento es requerido')
+    .isMongoId().withMessage('El encargado debe ser un ObjectId valido de MongoDB'),
   body('description')
     .optional()
     .trim()
@@ -31,6 +34,7 @@ export const validateUpdateEvent = [
   body('date').optional().isISO8601(),
   body('location').optional().trim().notEmpty(),
   body('capacity').optional().isInt({ min: 1 }),
+  body('managerId').optional().isMongoId().withMessage('El encargado debe ser un ObjectId valido de MongoDB'),
   body('description').optional().trim().isLength({ max: 500 }),
   checkValidators,
 ];

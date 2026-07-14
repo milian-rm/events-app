@@ -23,6 +23,12 @@ const eventSchema = new mongoose.Schema(
       required: [true, 'La capacidad es requerida'],
       min: [1, 'La capacidad debe ser mayor a 0'],
     },
+    managerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'El encargado del evento es requerido'],
+      index: true,
+    },
     description: {
       type: String,
       default: '',

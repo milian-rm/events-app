@@ -12,6 +12,7 @@ import { helmetConfiguration } from './helmet-configuration.js';
 import { requestLimit } from '../middlewares/request-limit.js';
 import { errorHandler } from '../middlewares/handle-errors.js';
 import registrationRoutes from '../src/inscriptions/registration.routes.js';
+import userRegistrationRoutes from '../src/userRegistrations/user-registration.routes.js';
 
 const BASE_URL = '/eventSystem/v1';
 
@@ -30,9 +31,23 @@ const middleware = (app) => {
 };
 
 const routes = (app) => {
+    app.get(`${BASE_URL}/health`, (req, res) => {
+        res.status(200).json({
+            success: true,
+            service: 'ServicioB',
+            message: 'Servicio B funcionando correctamente',
+        });
+    });
+
+    app.use(BASE_URL, registrationRoutes);
+    app.use(BASE_URL, userRegistrationRoutes);
     app.use(
         `${BASE_URL}/inscriptions`,
         registrationRoutes
+    );
+    app.use(
+        `${BASE_URL}/inscriptions`,
+        userRegistrationRoutes
     );
 };
 

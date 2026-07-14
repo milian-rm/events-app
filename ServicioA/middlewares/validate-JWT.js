@@ -1,5 +1,20 @@
 import jwt from 'jsonwebtoken';
 
+const getTokenFromRequest = (req) => {
+  const xToken = req.header('x-token');
+  const authorization = req.header('Authorization');
+
+  if (xToken) {
+    return xToken;
+  }
+
+  if (authorization?.toLowerCase().startsWith('bearer ')) {
+    return authorization.slice(7).trim();
+  }
+
+  return null;
+};
+
 export const validateJWT = (req, res, next) => {
   const jwtConfig = {
     secret: process.env.JWT_SECRET,
@@ -8,28 +23,34 @@ export const validateJWT = (req, res, next) => {
   };
 
   if (!jwtConfig.secret) {
-    console.error('Error de validación JWT: JWT_SECRET no está definido');
+    console.error('Error de validacion JWT: JWT_SECRET no esta definido');
     return res.status(500).json({
       success: false,
-      message: 'Configuración del servidor inválida: falta JWT_SECRET',
+      message: 'Configuracion del servidor invalida: falta JWT_SECRET',
+      error: 'JWT_CONFIG_ERROR',
     });
   }
 
-  const token =
-    req.header('x-token') || req.header('Authorization')?.replace('Bearer ', '');
+  const token = getTokenFromRequest(req);
 
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: 'No se proporcionó un token',
+      message: 'No se proporciono un token',
       error: 'MISSING_TOKEN',
     });
   }
 
   try {
     const verifyOptions = {};
-    if (jwtConfig.issuer) verifyOptions.issuer = jwtConfig.issuer;
-    if (jwtConfig.audience) verifyOptions.audience = jwtConfig.audience;
+
+    if (jwtConfig.issuer) {
+      verifyOptions.issuer = jwtConfig.issuer;
+    }
+
+    if (jwtConfig.audience) {
+      verifyOptions.audience = jwtConfig.audience;
+    }
 
     const decoded = jwt.verify(token, jwtConfig.secret, verifyOptions);
 
@@ -42,7 +63,7 @@ export const validateJWT = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error('Error de validación JWT:', error.message);
+    console.error('Error de validacion JWT:', error.message);
 
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({
@@ -55,7 +76,7 @@ export const validateJWT = (req, res, next) => {
     if (error.name === 'JsonWebTokenError') {
       return res.status(401).json({
         success: false,
-        message: 'Token inválido',
+        message: 'Token invalido',
         error: 'INVALID_TOKEN',
       });
     }
