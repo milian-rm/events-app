@@ -4,7 +4,7 @@ import { useUiStore } from '../../../features/auth/store/uiStore.js';
 
 const links = [
   { to: '/eventos', label: 'Eventos', icon: CalendarDaysIcon },
-  { to: '/inscripciones', label: 'Inscripciones', icon: ClipboardDocumentListIcon },
+  { to: '/registration', label: 'Inscripciones', icon: ClipboardDocumentListIcon }, // antes decía /inscripciones
   { to: '/resumen', label: 'Resumen', icon: ChartBarIcon },
 ];
 
