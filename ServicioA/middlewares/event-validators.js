@@ -18,7 +18,7 @@ export const validateCreateEvent = [
     .notEmpty().withMessage('La capacidad es requerida')
     .isInt({ min: 1 }).withMessage('La capacidad debe ser un entero mayor a 0'),
   body('managerId')
-    .notEmpty().withMessage('El encargado del evento es requerido')
+    .optional({ nullable: true, checkFalsy: true })
     .isMongoId().withMessage('El encargado debe ser un ObjectId valido de MongoDB'),
   body('description')
     .optional()

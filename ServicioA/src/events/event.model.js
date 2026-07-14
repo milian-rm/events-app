@@ -26,7 +26,8 @@ const eventSchema = new mongoose.Schema(
     managerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: [true, 'El encargado del evento es requerido'],
+      required: false,
+      default: null,
       index: true,
     },
     description: {

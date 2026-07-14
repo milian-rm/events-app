@@ -54,7 +54,7 @@ public class AuthService(
             LastName = registerDto.LastName,
             Email = registerDto.Email.ToLowerInvariant(),
             Password = passwordHashService.HashPassword(registerDto.Password),
-            Status = false,
+            Status = true,
             UserProfile = new UserProfile
             {
                 Id = userProfileId,
@@ -66,7 +66,7 @@ public class AuthService(
             {
                 Id = userEmailId,
                 UserId = userId,
-                EmailVerified = false,
+                EmailVerified = true,
                 EmailVerificationToken = emailVerificationToken,
                 EmailVerificationTokenExpiration = DateTime.UtcNow.AddHours(24)
             },
@@ -101,8 +101,8 @@ public class AuthService(
         {
             Success = true,
             User = MapToUserResponseDto(createdUser),
-            Message = "Admin registrado exitosamente. Por favor, verifica tu email para activar la cuenta.",
-            EmailVerificationRequired = true
+            Message = "Admin registrado exitosamente.",
+            EmailVerificationRequired = false
         };
     }
 
