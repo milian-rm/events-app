@@ -38,7 +38,9 @@ export const fetchEventById = async (id) => {
 };
 
 export const createEventRecord = async (eventData) => {
-  await ensureActiveManager(eventData.managerId);
+  if (eventData.managerId) {
+    await ensureActiveManager(eventData.managerId);
+  }
   const event = new Event(eventData);
   await event.save();
   return event.populate('managerId', 'fullName email phone documentId');

@@ -4,7 +4,7 @@ export default function UserCard({ user, onEdit, onDelete }) {
   return (
     <div className="bg-white rounded-2xl shadow p-5 flex flex-col gap-3">
       <div className="flex items-center gap-3">
-        <UserCircleIcon className="w-10 h-10 text-indigo-400 shrink-0" />
+        <UserCircleIcon className="w-10 h-10 text-purple-400 shrink-0" />
         <div className="min-w-0">
           <h3 className="text-base font-bold text-slate-800 truncate">
             {user.nombre} {user.apellido}
@@ -24,7 +24,7 @@ export default function UserCard({ user, onEdit, onDelete }) {
       <div className="flex gap-2 pt-2 border-t border-slate-100 mt-2">
         <button
           onClick={() => onEdit(user)}
-          className="flex-1 flex items-center justify-center gap-1 text-indigo-600 hover:bg-indigo-50 rounded-lg py-1.5 text-sm font-medium transition"
+          className="flex-1 flex items-center justify-center gap-1 text-purple-600 hover:bg-purple-50 rounded-lg py-1.5 text-sm font-medium transition"
         >
           <PencilSquareIcon className="w-4 h-4" /> Editar
         </button>

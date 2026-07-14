@@ -15,7 +15,7 @@ export default function UserFormFields({ form, onChange, isEditing, errors = {} 
             onInput={(e) => {
               e.target.value = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]/g, '');
             }}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Nombre"
           />
           {errors.nombre && (
@@ -33,7 +33,7 @@ export default function UserFormFields({ form, onChange, isEditing, errors = {} 
             onInput={(e) => {
               e.target.value = e.target.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñÜü\s]/g, '');
             }}
-            className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Apellido"
           />
           {errors.apellido && (
@@ -55,7 +55,7 @@ export default function UserFormFields({ form, onChange, isEditing, errors = {} 
           onInput={(e) => {
             e.target.value = e.target.value.replace(/\D/g, '').slice(0, 8);
           }}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="00000000"
         />
         {errors.telefono && (
@@ -72,7 +72,7 @@ export default function UserFormFields({ form, onChange, isEditing, errors = {} 
           name="email"
           value={form.email}
           onChange={onChange}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="correo@ejemplo.com"
         />
         {errors.email && (
@@ -90,7 +90,7 @@ export default function UserFormFields({ form, onChange, isEditing, errors = {} 
           name="password"
           value={form.password}
           onChange={onChange}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder={isEditing ? '••••••••' : 'Mínimo 6 caracteres'}
         />
         {errors.password && (

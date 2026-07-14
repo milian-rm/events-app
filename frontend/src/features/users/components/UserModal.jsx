@@ -120,7 +120,7 @@ export default function UserModal({ open, onClose, onSaved, editingUser }) {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-medium rounded-lg py-2 transition"
+              className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-medium rounded-lg py-2 transition"
             >
               {loading ? 'Guardando...' : 'Guardar'}
             </button>

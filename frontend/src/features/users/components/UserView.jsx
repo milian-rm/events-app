@@ -51,14 +51,16 @@ export default function UserView() {
   };
 
   return (
-    <div>
+    <div className="max-w-7xl mx-auto px-4 py-10">
       <UserHeader search={search} onSearchChange={setSearch} onNew={handleNew} />
 
       {error && (
         <div className="bg-red-50 text-red-700 text-sm rounded-lg px-4 py-2 mb-4">{error}</div>
       )}
 
-      <UserGrid users={users} loading={loading} onEdit={handleEdit} onDelete={handleDelete} />
+      <div className="mt-6">
+        <UserGrid users={users} loading={loading} onEdit={handleEdit} onDelete={handleDelete} />
+      </div>
 
       <UserModal
         open={modalOpen}

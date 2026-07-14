@@ -16,13 +16,14 @@ export const useRegistrationStore = create((set, get) => ({
   attendeesByEvent: {},
   attendeesLoading: {},
 
-  // Trae eventos disponibles + completos desde el Servicio B (sin mocks).
   fetchEvents: async () => {
     set({ loading: true, error: '' });
     try {
       const [availableRes, fullRes] = await Promise.all([getAvailableEvents(), getFullEvents()]);
-      const available = availableRes.data?.data || availableRes.data || [];
-      const full = fullRes.data?.data || fullRes.data || [];
+      const availableRaw = availableRes.data?.data?.events || availableRes.data?.data || availableRes.data || [];
+      const fullRaw = fullRes.data?.data?.events || fullRes.data?.data || fullRes.data || [];
+      const available = Array.isArray(availableRaw) ? availableRaw : [];
+      const full = Array.isArray(fullRaw) ? fullRaw : [];
       set({ events: [...available, ...full], loading: false });
     } catch (err) {
       set({
@@ -36,9 +37,8 @@ export const useRegistrationStore = create((set, get) => ({
   fetchSummary: async () => {
     try {
       const { data } = await getSummary();
-      set({ summary: data.data || data });
+      set({ summary: data?.data || data });
     } catch {
-      // Si el resumen falla no bloqueamos el resto de la vista.
       set({ summary: null });
     }
   },
@@ -48,7 +48,7 @@ export const useRegistrationStore = create((set, get) => ({
     try {
       const { data } = await getAttendees(eventId);
       set((s) => ({
-        attendeesByEvent: { ...s.attendeesByEvent, [eventId]: data.data || data || [] },
+        attendeesByEvent: { ...s.attendeesByEvent, [eventId]: data?.data || data || [] },
         attendeesLoading: { ...s.attendeesLoading, [eventId]: false },
       }));
     } catch {
@@ -61,7 +61,6 @@ export const useRegistrationStore = create((set, get) => ({
 
   cancelRegistration: async (registrationId, eventId) => {
     await cancelRegistrationRequest(registrationId);
-    // Refrescamos asistentes del evento, listado y resumen para reflejar el cupo liberado.
     await Promise.all([get().getAttendeesByEvent(eventId), get().fetchEvents(), get().fetchSummary()]);
   },
 }));

@@ -16,8 +16,6 @@ export default function EventView() {
     setLoading(true);
     setError('');
     try {
-      // TODO: confirmar con el dueño del Servicio A el/los nombres reales de
-      // los query params de búsqueda (¿"search" único o nombre/fecha/lugar por separado?)
       const { data } = await getEvents(query ? { search: query } : undefined);
       setEvents(data.data || data || []);
     } catch (err) {
@@ -53,14 +51,16 @@ export default function EventView() {
   };
 
   return (
-    <div>
+    <div className="max-w-7xl mx-auto px-4 py-10">
       <EventHeader search={search} onSearchChange={setSearch} onNew={handleNew} />
 
       {error && (
         <div className="bg-red-50 text-red-700 text-sm rounded-lg px-4 py-2 mb-4">{error}</div>
       )}
 
-      <EventGrid events={events} loading={loading} onEdit={handleEdit} onDelete={handleDelete} />
+      <div className="mt-6">
+        <EventGrid events={events} loading={loading} onEdit={handleEdit} onDelete={handleDelete} />
+      </div>
 
       <EventModal
         open={modalOpen}

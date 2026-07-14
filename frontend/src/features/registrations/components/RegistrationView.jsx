@@ -22,7 +22,7 @@ export default function RegistrationView() {
   }, [fetchEvents, fetchSummary]);
 
   const fullEventIds = new Set(
-    events.filter((e) => (e.inscritos ?? 0) >= (e.capacidad ?? 0)).map((e) => e._id)
+    events.filter((e) => e.isFull).map((e) => e._id)
   );
 
   const filteredEvents = events.filter((e) => {

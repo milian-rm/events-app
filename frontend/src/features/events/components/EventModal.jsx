@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import EventFormFields from './EventFormFields.jsx';
 import { useSaveEvent } from '../hooks/useSaveEvent.js';
+import { getUsers } from '../../../shared/api/usersClient.js';
 
-const emptyForm = { nombre: '', fecha: '', lugar: '', capacidad: '' };
+const emptyForm = { nombre: '', fecha: '', lugar: '', capacidad: '', managerId: '' };
 
-// Reglas de validación, mismo criterio que el proyecto del restaurante
 function validate(form) {
   const errors = {};
 
@@ -36,6 +36,10 @@ function validate(form) {
     errors.capacidad = 'Debe ser al menos 1';
   }
 
+  if (!form.managerId) {
+    errors.managerId = 'Debes seleccionar un encargado';
+  }
+
   return errors;
 }
 
@@ -43,15 +47,27 @@ export default function EventModal({ open, onClose, onSaved, editingEvent }) {
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [managers, setManagers] = useState([]);
   const { saveEvent, loading, error } = useSaveEvent();
 
   useEffect(() => {
+    if (!open) return;
+    getUsers()
+      .then(({ data }) => setManagers(data?.data || []))
+      .catch(() => setManagers([]));
+  }, [open]);
+
+  useEffect(() => {
     if (editingEvent) {
+      const mgrId = typeof editingEvent.managerId === 'object'
+        ? editingEvent.managerId?._id || ''
+        : editingEvent.managerId || '';
       setForm({
         nombre: editingEvent.nombre || '',
         fecha: editingEvent.fecha?.slice(0, 10) || '',
         lugar: editingEvent.lugar || '',
         capacidad: editingEvent.capacidad ?? '',
+        managerId: mgrId,
       });
     } else {
       setForm(emptyForm);
@@ -65,7 +81,6 @@ export default function EventModal({ open, onClose, onSaved, editingEvent }) {
   const handleChange = (e) => {
     const nextForm = { ...form, [e.target.name]: e.target.value };
     setForm(nextForm);
-    // Si ya se intentó enviar, revalida en vivo (igual que react-hook-form en modo onChange)
     if (submitted) setErrors(validate(nextForm));
   };
 
@@ -105,7 +120,7 @@ export default function EventModal({ open, onClose, onSaved, editingEvent }) {
             <div className="bg-red-50 text-red-700 text-sm rounded-lg px-4 py-2">{error}</div>
           )}
 
-          <EventFormFields form={form} onChange={handleChange} errors={errors} />
+          <EventFormFields form={form} onChange={handleChange} errors={errors} managers={managers} />
 
           <div className="flex gap-3 pt-2">
             <button
@@ -118,7 +133,7 @@ export default function EventModal({ open, onClose, onSaved, editingEvent }) {
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-medium rounded-lg py-2 transition"
+              className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-medium rounded-lg py-2 transition"
             >
               {loading ? 'Guardando...' : 'Guardar'}
             </button>
