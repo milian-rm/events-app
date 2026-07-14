@@ -69,15 +69,18 @@ Todos los endpoints de eventos requieren autenticación, mediante uno de estos d
 - **JWT de usuario** (Frontend): header `x-token` o `Authorization: Bearer <token>`, emitido por el Servicio de Autenticación.
 - **Token interno** (Servicio B): header `x-internal-token` con el valor de `INTERNAL_SERVICE_TOKEN`.
 
+El endpoint `GET /events/:id/capacity` acepta ambos métodos indistintamente (JWT de usuario o token interno), ya que tanto el Frontend como el Servicio B necesitan consultarlo.
+
 ## Endpoints
 
-| Método | Ruta | Descripción |
-|---|---|---|
-| GET | `/eventsService/v1/events` | Lista eventos. Filtros opcionales por query: `name`, `date`, `location` |
-| GET | `/eventsService/v1/events/:id` | Obtiene un evento por ID |
-| POST | `/eventsService/v1/events` | Crea un evento |
-| PUT | `/eventsService/v1/events/:id` | Edita un evento |
-| DELETE | `/eventsService/v1/events/:id` | Elimina un evento (soft delete) |
+| Método | Ruta | Descripción | Auth |
+|---|---|---|---|
+| GET | `/eventsService/v1/events` | Lista eventos. Filtros opcionales por query: `name`, `date`, `location` | JWT |
+| GET | `/eventsService/v1/events/:id` | Obtiene un evento por ID | JWT |
+| GET | `/eventsService/v1/events/:id/capacity` | Obtiene la capacidad y estado (`isActive`) de un evento, sin el resto de los datos | JWT o token interno |
+| POST | `/eventsService/v1/events` | Crea un evento | JWT |
+| PUT | `/eventsService/v1/events/:id` | Edita un evento | JWT |
+| DELETE | `/eventsService/v1/events/:id` | Elimina un evento (soft delete) | JWT |
 
 ### Modelo de Evento
 
@@ -94,4 +97,5 @@ Todos los endpoints de eventos requieren autenticación, mediante uno de estos d
 ### Notas
 
 - La eliminación es lógica (soft delete): el documento no se borra de MongoDB, se marca `isActive: false` y deja de aparecer en listados y consultas.
-- El Servicio B consume `GET /events` y `GET /events/:id` mediante `x-internal-token` para obtener la capacidad de cada evento y calcular disponibilidad de cupos.
+- El Servicio B consume `GET /events/:id` y `GET /events/:id/capacity` mediante `x-internal-token` para obtener la capacidad de cada evento y calcular disponibilidad de cupos.
+- Este servicio **no administra datos de personas ni asistentes** (nombre, correo, inscripciones). Esa información y su lógica correspondiente viven en el Servicio B, que las referencia por `eventId` contra los datos expuestos aquí.
