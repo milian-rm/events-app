@@ -1,9 +1,15 @@
 import { useState } from 'react';
-import { UserIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
+import { UserIcon, PhoneIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { registerRequest } from '../../../shared/api/authClient.js';
 
 export default function RegisterForm({ onSwitchToLogin }) {
-  const [form, setForm] = useState({ nombre: '', email: '', password: '' });
+  const [form, setForm] = useState({
+    nombre: '',
+    apellido: '',
+    telefono: '',
+    email: '',
+    password: '',
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -14,7 +20,7 @@ export default function RegisterForm({ onSwitchToLogin }) {
     e.preventDefault();
     setError('');
 
-    if (!form.nombre.trim() || !form.email.trim() || !form.password) {
+    if (!form.nombre.trim() || !form.apellido.trim() || !form.telefono.trim() || !form.email.trim() || !form.password) {
       setError('Todos los campos son obligatorios.');
       return;
     }
@@ -49,16 +55,43 @@ export default function RegisterForm({ onSwitchToLogin }) {
         <div className="bg-red-50 text-red-700 text-sm rounded-lg px-4 py-2">{error}</div>
       )}
 
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="text-sm text-slate-600 flex items-center gap-1 mb-1">
+            <UserIcon className="w-4 h-4" /> Nombre
+          </label>
+          <input
+            name="nombre"
+            value={form.nombre}
+            onChange={handleChange}
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Nombre"
+          />
+        </div>
+        <div>
+          <label className="text-sm text-slate-600 flex items-center gap-1 mb-1">
+            <UserIcon className="w-4 h-4" /> Apellido
+          </label>
+          <input
+            name="apellido"
+            value={form.apellido}
+            onChange={handleChange}
+            className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            placeholder="Apellido"
+          />
+        </div>
+      </div>
+
       <div>
         <label className="text-sm text-slate-600 flex items-center gap-1 mb-1">
-          <UserIcon className="w-4 h-4" /> Nombre
+          <PhoneIcon className="w-4 h-4" /> Teléfono
         </label>
         <input
-          name="nombre"
-          value={form.nombre}
+          name="telefono"
+          value={form.telefono}
           onChange={handleChange}
           className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          placeholder="Tu nombre completo"
+          placeholder="0000-0000"
         />
       </div>
 
