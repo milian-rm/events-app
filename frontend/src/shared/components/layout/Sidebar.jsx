@@ -1,13 +1,13 @@
 import { NavLink } from 'react-router-dom';
-import { CalendarDaysIcon, ClipboardDocumentListIcon, ChartBarIcon } from '@heroicons/react/24/outline';
+import { CalendarDaysIcon, ClipboardDocumentListIcon, ChartBarIcon, UsersIcon } from '@heroicons/react/24/outline';
 import { useUiStore } from '../../../features/auth/store/uiStore.js';
 
 const links = [
   { to: '/eventos', label: 'Eventos', icon: CalendarDaysIcon },
+  { to: '/usuarios', label: 'Usuarios', icon: UsersIcon },
   { to: '/inscripciones', label: 'Inscripciones', icon: ClipboardDocumentListIcon },
   { to: '/resumen', label: 'Resumen', icon: ChartBarIcon },
 ];
-
 export default function Sidebar() {
   const sidebarOpen = useUiStore((s) => s.sidebarOpen);
   const closeSidebar = useUiStore((s) => s.closeSidebar);
