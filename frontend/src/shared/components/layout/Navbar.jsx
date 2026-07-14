@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Bars3Icon, ArrowRightOnRectangleIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, ArrowRightOnRectangleIcon, CalendarDaysIcon } from '@heroicons/react/24/outline';
 import { useAuthStore } from '../../../features/auth/store/authStore.js';
 import { useUiStore } from '../../../features/auth/store/uiStore.js';
 
@@ -24,7 +24,10 @@ export default function Navbar() {
         >
           <Bars3Icon className="w-6 h-6" />
         </button>
-        <span className="font-bold text-lg">📅 Sistema de Eventos</span>
+        <span className="flex items-center gap-2 font-bold text-lg">
+          <CalendarDaysIcon className="w-5 h-5" />
+          Sistema de Eventos
+        </span>
       </div>
 
       <div className="flex items-center gap-4 text-sm">
