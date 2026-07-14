@@ -12,7 +12,20 @@ authClient.interceptors.request.use((config) => {
   return config;
 });
 
-export const registerRequest = (data) => authClient.post('/auth/register', data);
-export const loginRequest = (data) => authClient.post('/auth/login', data);
+// Mapear español → inglés para registro
+const toRegisterBackend = (data) => ({
+  FirstName: data.nombre,
+  LastName: data.apellido,
+  Phone: data.telefono,
+  Email: data.email,
+  Password: data.password,
+});
+
+export const registerRequest = (data) => authClient.post('/auth/register', toRegisterBackend(data));
+
+export const loginRequest = (data) => authClient.post('/auth/login', {
+  Email: data.email,
+  Password: data.password,
+});
 
 export default authClient;

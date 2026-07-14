@@ -1,9 +1,11 @@
-import { CalendarDaysIcon, MapPinIcon, UsersIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { CalendarDaysIcon, MapPinIcon, UsersIcon, UserCircleIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 export default function EventCard({ event, onEdit, onDelete }) {
   const fechaFormateada = event.fecha
     ? new Date(event.fecha).toLocaleDateString('es-GT', { year: 'numeric', month: 'short', day: 'numeric' })
     : '—';
+
+  const encargado = event.managerId?.fullName || 'Sin asignar';
 
   return (
     <div className="bg-white rounded-2xl shadow p-5 flex flex-col gap-3">
@@ -19,12 +21,15 @@ export default function EventCard({ event, onEdit, onDelete }) {
         <p className="flex items-center gap-2">
           <UsersIcon className="w-4 h-4" /> Capacidad: {event.capacidad}
         </p>
+        <p className="flex items-center gap-2">
+          <UserCircleIcon className="w-4 h-4" /> Encargado: {encargado}
+        </p>
       </div>
 
       <div className="flex gap-2 pt-2 border-t border-slate-100 mt-2">
         <button
           onClick={() => onEdit(event)}
-          className="flex-1 flex items-center justify-center gap-1 text-indigo-600 hover:bg-indigo-50 rounded-lg py-1.5 text-sm font-medium transition"
+          className="flex-1 flex items-center justify-center gap-1 text-purple-600 hover:bg-purple-50 rounded-lg py-1.5 text-sm font-medium transition"
         >
           <PencilSquareIcon className="w-4 h-4" /> Editar
         </button>

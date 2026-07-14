@@ -4,7 +4,7 @@ import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/24/outline';
 import { loginRequest } from '../../../shared/api/authClient.js';
 import { useAuthStore } from '../store/authStore.js';
 
-export default function LoginForm({ onSwitchToRegister }) {
+export default function LoginForm() {
   const navigate = useNavigate();
   const login = useAuthStore((s) => s.login);
   const [form, setForm] = useState({ email: '', password: '' });
@@ -25,9 +25,7 @@ export default function LoginForm({ onSwitchToRegister }) {
     setLoading(true);
     try {
       const { data } = await loginRequest(form);
-      // TODO: ajustar cuando el equipo de Auth confirme la forma real de la respuesta.
-      // Por ahora asumo { token, user }.
-      login(data.token, data.user);
+      login(data.token, data.userDetails);
       navigate('/eventos');
     } catch (err) {
       setError(err.response?.data?.message || 'Credenciales inválidas.');
@@ -51,7 +49,7 @@ export default function LoginForm({ onSwitchToRegister }) {
           name="email"
           value={form.email}
           onChange={handleChange}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="correo@ejemplo.com"
         />
       </div>
@@ -65,7 +63,7 @@ export default function LoginForm({ onSwitchToRegister }) {
           name="password"
           value={form.password}
           onChange={handleChange}
-          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
           placeholder="Tu contraseña"
         />
       </div>
@@ -73,21 +71,10 @@ export default function LoginForm({ onSwitchToRegister }) {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-medium rounded-lg py-2 transition"
+        className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 text-white font-medium rounded-lg py-2 transition"
       >
         {loading ? 'Ingresando...' : 'Ingresar'}
       </button>
-
-      <p className="text-sm text-slate-500 text-center">
-        ¿No tienes cuenta?{' '}
-        <button
-          type="button"
-          onClick={onSwitchToRegister}
-          className="text-indigo-600 font-medium hover:underline"
-        >
-          Regístrate
-        </button>
-      </p>
     </form>
   );
 }

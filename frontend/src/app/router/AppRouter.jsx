@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthPage from '../../features/auth/pages/AuthPage.jsx';
+import AdminRegisterView from '../../features/auth/pages/AdminRegisterView.jsx';
 
 import EventView from '../../features/events/components/EventView.jsx';
 import UserView from '../../features/users/components/UserView.jsx';
@@ -25,6 +26,7 @@ export default function AppRouter() {
           <Route path="/usuarios" element={<UserView />} />
           <Route path="/inscripciones" element={<RegistrationView />} />
           <Route path="/resumen" element={<ResumenView />} />
+          <Route path="/registrar-admin" element={<AdminRegisterView />} />
           <Route index element={<Navigate to="/eventos" replace />} />
         </Route>
 

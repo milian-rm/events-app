@@ -15,11 +15,11 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-indigo-600 text-white px-4 py-3 flex items-center justify-between shadow">
+    <header className="bg-purple-600 text-white px-4 py-3 flex items-center justify-between shadow">
       <div className="flex items-center gap-3">
         <button
           onClick={toggleSidebar}
-          className="md:hidden p-1 rounded hover:bg-indigo-500"
+          className="md:hidden p-1 rounded hover:bg-purple-500"
           aria-label="Abrir menú"
         >
           <Bars3Icon className="w-6 h-6" />

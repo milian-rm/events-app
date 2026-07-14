@@ -1,7 +1,7 @@
 import RegistrationCard from './RegistrationCard.jsx';
 
 export default function RegistrationGrid({ events, fullEventIds, loading, onInscribe }) {
-  if (loading && events.length === 0) {
+  if (loading) {
     return (
       <div className="py-16 text-center text-slate-400 font-medium animate-pulse">
         Cargando eventos...
