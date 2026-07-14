@@ -10,6 +10,7 @@ import { corsOptions } from './cors-configuration.js';
 import { helmetConfiguration } from './helmet-configuration.js';
 import { errorHandler } from '../middlewares/handle-errors.js';
 import eventRoutes from '../src/events/event.routes.js';
+import userRoutes from '../src/users/user.routes.js';
 
 const BASE_PATH = '/eventsService/v1';
 
@@ -24,6 +25,7 @@ const middlewares = (app) => {
 
 const routes = (app) => {
   app.use(`${BASE_PATH}/events`, eventRoutes);
+  app.use(`${BASE_PATH}/users`, userRoutes);
 
   app.get(`${BASE_PATH}/health`, (req, res) => {
     res.status(200).json({

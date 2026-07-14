@@ -35,6 +35,14 @@ export const errorHandler = (err, req, res, next) => {
     return res.status(401).json({ success: false, message: 'Token expirado', error: 'TOKEN_EXPIRED' });
   }
 
+  if (err.statusCode) {
+    return res.status(err.statusCode).json({
+      success: false,
+      message: err.message,
+      error: err.code || 'CUSTOM_ERROR',
+    });
+  }
+
   res.status(500).json({
     success: false,
     message: 'Error interno del servidor',
